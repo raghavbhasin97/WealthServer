@@ -1,0 +1,29 @@
+{
+  "name": "wealthserver",
+  "version": "1.0.0",
+  "description": "A web server for WealthApp",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha --timeout 10000",
+    "start": "nodemon app"
+  },
+  "author": "Raghav Bhasin",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-validator": "^3.1.2",
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.7.3",
+    "passport": "^0.4.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.3"
+  }
+}
