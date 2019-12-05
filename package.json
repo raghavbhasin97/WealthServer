@@ -4,7 +4,7 @@
   "description": "A web server for WealthApp",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 10000 --exit",
     "start": "nodemon app"
   },
   "author": "Raghav Bhasin",
