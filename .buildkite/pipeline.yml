@@ -1,0 +1,4 @@
+steps:
+  - name: ":node: :npm: API Tests"
+    command: scripts/tests.sh
+    timeout_in_minutes: 30
