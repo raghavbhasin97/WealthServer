@@ -56,7 +56,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('name').eql('Name field is required');;
+                  res.body.should.have.property('name').eql('Name field is required');
               done();
             });
       });
@@ -73,7 +73,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('email').eql('Email field is required');;
+                  res.body.should.have.property('email').eql('Email field is required');
               done();
             });
       });
@@ -90,7 +90,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('password').eql('Password field is required');;
+                  res.body.should.have.property('password').eql('Password field is required');
               done();
             });
       });
@@ -111,7 +111,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('name').eql('Name must be between 2 and 30 characters');;
+                  res.body.should.have.property('name').eql('Name must be between 2 and 30 characters');
               done();
             });
       });
@@ -129,7 +129,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('name').eql('Name must be between 2 and 30 characters');;
+                  res.body.should.have.property('name').eql('Name must be between 2 and 30 characters');
               done();
             });
       });
@@ -147,7 +147,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('email').eql('Email is invalid');;
+                  res.body.should.have.property('email').eql('Email is invalid');
               done();
             });
       });
@@ -165,7 +165,7 @@ describe('User', () => {
                   res.should.have.status(400);
                   res.body.should.be.a('object');
                   assert.equal(Object.keys(res.body).length, 1);
-                  res.body.should.have.property('password').eql('Password must be at least 6 characters');;
+                  res.body.should.have.property('password').eql('Password must be at least 6 characters');
               done();
             });
       });
@@ -185,6 +185,31 @@ describe('User', () => {
                   res.should.have.status(201);
                   res.text.should.eq('User created')
               done();
+            });
+      });
+
+      // Test a duplicate user.
+      it('it should not POST a duplicate user', (done) => {
+          let user = {
+              password: "123456",
+              name: "John Doe",
+              email: "jdoe@email.com"
+          }
+        chai.request(server)
+            .post('/api/users')
+            .send(user)
+            .end((err, res) => {
+                  chai.request(server)
+                      .post('/api/users')
+                      .send(user)
+                      .end((err, res) => {
+                            res.should.be.json;
+                            res.should.have.status(400);
+                            res.body.should.be.a('object');
+                            assert.equal(Object.keys(res.body).length, 1);
+                            res.body.should.have.property('email').eql('Email already exists');
+                          done();
+                      });
             });
       });
 
