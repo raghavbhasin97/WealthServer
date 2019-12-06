@@ -4,14 +4,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const uuid = require('uuid/v4');
+const env = require('../config/env');
 
 // Load User model
 const User = require('../models/User');
 
 // Load Input Validation
 const validateRegisterInput = require('../validations/register');
+const validateLoginInput = require('../validations/login');
 
-// @route   POST api/users/register
+// @route   POST api/users
 // @desc    Register user
 // @access  Public
 router.post('/', (req, res) => {
@@ -46,6 +48,55 @@ router.post('/', (req, res) => {
       });
     }
   });
+});
+
+// @route   GET api/users/login
+// @desc    Login user / return JWT
+// @access  Public
+router.get('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const email = req.body.email;
+
+  User
+    .findOne({email})
+    .then( user => {
+      // Check for user
+      if (!user) {
+        errors.email = 'User not found';
+        return res.status(404).json(errors);
+      }
+
+      // Check Password
+      bcrypt
+        .compare(req.body.password, user.password)
+        .then(isMatch =>{
+            if (isMatch) {
+              // Token payload
+              const payload = {id: user.id}
+
+              // Sign Token
+              jwt.sign(
+                payload, 
+                env.jwtSecret,
+                { expiresIn: 3600 },
+                (err, token) => {
+                  res.json({'token': 'Bearer ' + token})
+                }
+              );
+
+            } else {
+              errors.password = 'Password incorrect';
+              return res.status(400).json(errors);
+            }
+        });
+    });
+
 });
 
 module.exports = router;
