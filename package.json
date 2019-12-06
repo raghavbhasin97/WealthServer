@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha --timeout 10000 --exit",
     "start": "node app.js",
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "deploy": "git push heroku master"
   },
   "author": "Raghav Bhasin",
   "license": "ISC",
