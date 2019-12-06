@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha --timeout 10000 --exit",
-    "start": "nodemon app"
+    "start": "node app.js",
+    "dev": "nodemon app"
   },
   "author": "Raghav Bhasin",
   "license": "ISC",
