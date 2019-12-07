@@ -4,20 +4,22 @@ const isEmpty = require('./is-empty');
 module.exports = function validateAddHoldings(data) {
   let errors = {};
 
-  data.securityId = !isEmpty(data.securityId) ? data.securityId : '';
-  data.costBasis = !isEmpty(data.costBasis) ? data.costBasis : '';
-  data.quantity = !isEmpty(data.quantity) ? data.quantity : '';
-
-  if (Validator.isEmpty(data.securityId)) {
-    errors.securityId = 'Security Id field is required';
+  data.security = !isEmpty(data.security) ? data.security : '';
+  
+  if (Validator.isEmpty(data.security)) {
+    errors.security = 'Security Symbol field is required';
   }
 
-  if (Validator.isEmpty(data.costBasis)) {
+  if (isEmpty(data.costBasis)) {
     errors.costBasis = 'Cost Basis field is required';
+  } else if(isNaN(data.costBasis)) {
+    errors.costBasis = 'Cost Basis should be a number';
   }
 
-  if (Validator.isEmpty(data.quantity)) {
+  if (isEmpty(data.quantity)) {
     errors.quantity = 'Quantity field is required';
+  } else if(isNaN(data.quantity)) {
+    errors.quantity = 'Quantity should be a number';
   }
 
   return {
