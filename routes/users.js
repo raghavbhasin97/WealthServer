@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const uuid = require('uuid/v4');
 const env = require('../config/env');
 
 // Load User model

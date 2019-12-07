@@ -5,6 +5,7 @@ const passport = require('passport');
 
 const users = require('./routes/users');
 const securitys = require('./routes/securitys');
+const holdings = require('./routes/holdings');
 
 // Load Environment
 const env = require('./config/env');
@@ -38,6 +39,7 @@ require('./config/passport')(passport);
 // Use Routes
 app.use('/api/users', users);
 app.use('/api/securitys', securitys);
+app.use('/api/holdings', holdings);
 
 app
 	.listen(
