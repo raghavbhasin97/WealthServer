@@ -184,7 +184,14 @@ describe('User', () => {
                   res.should.be.html;
                   res.should.have.status(201);
                   res.text.should.eq('User created')
-              done();
+                  User
+                    .find({})
+                    .then(users => {
+                       assert.equal(users.length, 1);
+                       assert.equal(users[0].name, user.name);
+                       assert.equal(users[0].email, user.email);
+                       done();
+                    })
             });
       });
 
