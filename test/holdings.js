@@ -20,6 +20,7 @@ chai.use(chaiHttp);
 //Our parent block
 describe('Holding', () => {
     beforeEach((done) => { //Before each test we empty the database
+    Account.deleteMany({}, _ => {
       Holding.deleteMany({}, _ => {
         Security.deleteMany({}, _ => {
           User.deleteMany({}, _ => {
@@ -58,6 +59,7 @@ describe('Holding', () => {
           })
         })
       })      
+     });
     });
 
     /*
