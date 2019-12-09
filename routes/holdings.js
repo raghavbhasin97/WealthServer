@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const env = require('../config/env');
 
-// Load User model
+// Load models
 const Holding = require('../models/Holding');
 const Security = require('../models/Security');
+const Account = require('../models/Account');
 
 // Load Input Validation
 const validateAddHoldings = require('../validations/addHoldings');
@@ -38,10 +39,39 @@ router.post(
 				});
 				newHolding
 					.save()
-					.then(holdings => res.status(201).send('Holdings created'))
-					.catch(err => res.status(400).json({'save': 'Error adding holding.'}));
+					.then(holding => {
+						Account
+						.findById(req.body.accountId)
+						.then( account => {
+							account.holdings.push(holding._id)
+							Account.findOneAndUpdate(
+								{_id: account._id},
+								account,
+								{upsert : false}
+							)
+							.then(_ => res.status(201).json(holding))
+							.catch(_ => {
+								console.log(`Failed to update account ${account}`)
+								deleteHolding(holding)
+									.then(_ => res.status(400).json({'save': 'Error adding holding.'}))
+									.catch(_ => res.status(400).json({'save': 'Error adding holding.'}))
+							})
+						})
+						.catch(_ => {
+							console.log(`Failed to find account ${req.body.accountId}`)
+							deleteHolding(holding)
+								.then(_ => res.status(400).json({'save': 'Error adding holding.'}))
+								.catch(_ => res.status(400).json({'save': 'Error adding holding.'}))
+						})
+					})
+					.catch(_ => res.status(400).json({'save': 'Error adding holding.'}));
 			})
-			.catch(err => res.status(404).json({'save': 'Invalid security'}))
+			.catch(_ => res.status(404).json({'save': 'Invalid security'}))
 });
+
+
+function deleteHolding(holding, callback) {
+	return Holding.deleteOne(holding)
+}
 
 module.exports = router;

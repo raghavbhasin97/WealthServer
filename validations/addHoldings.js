@@ -5,9 +5,14 @@ module.exports = function validateAddHoldings(data) {
   let errors = {};
 
   data.security = !isEmpty(data.security) ? data.security : '';
+  data.accountId = !isEmpty(data.accountId) ? data.accountId : '';
   
   if (Validator.isEmpty(data.security)) {
     errors.security = 'Security Symbol field is required';
+  }
+
+  if (Validator.isEmpty(data.accountId)) {
+    errors.accountId = 'Account Id field is required';
   }
 
   if (isEmpty(data.costBasis)) {
